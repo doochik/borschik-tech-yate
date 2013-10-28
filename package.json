@@ -1,0 +1,26 @@
+{
+  "name": "borschik-tech-yate",
+  "version": "0.0.0",
+  "description": "Yate tech for Borschik",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/doochik/borschik-tech-yate.git"
+  },
+  "keywords": [
+    "borschik",
+    "yate"
+  ],
+  "author": {
+    "name": "Aleksei Androsov",
+    "email": "doochik@ya.ru",
+    "url": "http://github.com/doochik"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/doochik/borschik-tech-yate/issues"
+  }
+}
