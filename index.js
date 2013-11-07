@@ -4,7 +4,7 @@ var UglifyJS = require('borschik/node_modules/uglify-js');
 var yateFile = BorschikJS.File.inherit({
 
     read: function() {
-        var yate = require('d2-build-tools/node_modules/yate');
+        var yate = require('yate');
 
         this.content = yate.compile(this.path).js;
 
