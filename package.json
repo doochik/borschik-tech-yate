@@ -25,7 +25,6 @@
   },
   "peerDependencies": {
       "borschik": "0.4.x",
-      "yate": "*",
-      "uglify-js": "2.x"
+      "yate": "*"
   }
 }
