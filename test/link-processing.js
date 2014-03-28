@@ -118,4 +118,57 @@ describe('link processing', function() {
                 throw new Error(e);
             });
     });
+
+    it("shouldn't process dynamic links", function(done) {
+        var echoStream = runYate(function(result) {
+            try {
+                assert.equal(result, '//yastatic.net/_/La6qi18Z8LwgnZdsAr1qy1GwCwo.gif');
+                done();
+            } catch (e) {
+                done(e);
+            }
+        });
+
+        borschik
+            .api({
+                'freeze': true,
+                'input': './test/link-processing/3/1.yate',
+                'minimize': false,
+                'output': echoStream,
+                'tech': './index.js'
+            })
+            .then(function() {
+                done();
+            })
+            .fail(function(e) {
+                throw new Error(e);
+            });
+    });
+
+    it("shouldn't process links as dynamic vars", function(done) {
+        var echoStream = runYate(function(result) {
+            try {
+                assert.equal(result, '//yastatic.net/_/La6qi18Z8LwgnZdsAr1qy1GwCwo.gif');
+                done();
+            } catch (e) {
+                done(e);
+            }
+        });
+
+        borschik
+            .api({
+                'freeze': true,
+                'input': './test/link-processing/4/1.yate',
+                'minimize': false,
+                'output': echoStream,
+                'tech': './index.js'
+            })
+            .then(function() {
+                done();
+            })
+            .fail(function(e) {
+                throw new Error(e);
+            });
+    });
+
 });

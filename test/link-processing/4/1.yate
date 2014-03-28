@@ -1,0 +1,6 @@
+external xml borschik-link(scalar)
+
+match / {
+    name = '@null.gif'
+    borschik-link(name)
+}
