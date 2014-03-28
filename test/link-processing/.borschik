@@ -1,0 +1,8 @@
+{
+    "paths": {
+        "./": "//yastatic.net/"
+    },
+    "freeze_paths": {
+        "./**": "_"
+    }
+}

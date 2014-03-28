@@ -1,63 +1,63 @@
-var BorschikJS = require('borschik/lib/techs/js');
-var UglifyJS = require('borschik/node_modules/uglify-js');
+var BorschikCSSBase = require('borschik/lib/techs/css-base');
+var PATH = require('path');
 
-var yateFile = BorschikJS.File.inherit({
+var yateFile = BorschikCSSBase.File.inherit({
 
     read: function() {
+        var FS = require('fs');
         var yate = require('yate');
 
-        this.content = yate.compile(this.path).js;
+        // import modules support
+        var imports = this.tech.opts.techOptions.import;
+        if (imports) {
+            for (var i = 0, l = imports.length; i < l; i++) {
+                var filename = imports[i];
+                var obj = JSON.parse( FS.readFileSync(filename, 'utf-8') );
+                yate.modules[ obj.name ] = obj;
+            }
+        }
+
+        var compiled = yate.compile(this.path);
+
+        var that = this;
+
+        compiled.ast.walkdo(function(ast, params, pKey, pObject) {
+            // find borschik-link calls
+            if (ast.is('inline_function') && ast.p.Name === 'borschik-link') {
+                // callargs
+                var callArgs = ast.p.Args;
+                if (callArgs.p.Items.length === 1) {
+                    // callarg
+                    var arg0 = callArgs.p.Items[0];
+                    if (arg0.getType() === 'scalar') {
+                        var item = arg0.p.Expr.p.Value.p.Items[0];
+                        var baseFile = item.where.input.filename;
+
+                        // resolve link to absolute path
+                        var absLinkPath = PATH.resolve(PATH.dirname(baseFile), item.p.Value);
+
+                        // create fake file to link
+                        var linkFile = that.tech.createFile(absLinkPath, 'link-url', this);
+
+                        // freeze link
+                        var newLink = JSON.parse(linkFile.process(baseFile));
+                        pObject[pKey] = yate.factory.make('string_literal', {}, newLink);
+                    }
+                }
+            }
+        });
 
         // удаляем первую строку
         // var yr = yr || require('yate/lib/runtime.js');
         // из-за нее нельзя исполнить JS в new Function
-        this.content = this.content.replace(/^.*\n/, '');
+        this.content = compiled.ast.js().replace(/^.*\n/, '');
 
         return this;
-    },
-
-    parseInclude: function(/** Buffer */content) {
-        return content;
-    },
-
-    processInclude: function(baseFile) {
-        var that = this;
-
-        try {
-            var originalAST = UglifyJS.parse(this.content);
-        } catch(e) {
-            console.error('Cant parse js file');
-            throw e;
-        }
-
-        var tt = new UglifyJS.TreeTransformer(null, function(node){
-            if (itIsCall(node, 'borschik-link')) {
-                var args = node.args;
-                if (args.length === 1) {
-                    if (args[0] instanceof UglifyJS.AST_String) {
-                        // freeze images with cssBase.processLink
-                        var newLink = JSON.parse(that.child('link-url', args[0].value).process(baseFile));
-                        return new UglifyJS.AST_String({value: newLink});
-                    }
-                }
-            }
-
-            return node;
-        }.bind(this));
-
-        var newAST = originalAST.transform(tt);
-
-        var printParams = {
-            beautify: true,
-            comments: 'all'
-        };
-
-        return newAST.print_to_string(printParams);
     }
 
 });
 
-var yateTech = BorschikJS.Tech.inherit({
+var yateTech = BorschikCSSBase.Tech.inherit({
 
     File: yateFile
 
@@ -65,13 +65,3 @@ var yateTech = BorschikJS.Tech.inherit({
 
 exports.Tech = yateTech;
 exports.File = yateFile;
-
-
-function itIsCall(node, name) {
-    return node instanceof UglifyJS.AST_Call &&
-        (
-            node.expression.name == name ||
-                node.expression.property == name ||
-                (node.expression.property && node.expression.property.value == name)
-            )
-}

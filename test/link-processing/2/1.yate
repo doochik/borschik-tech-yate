@@ -1,0 +1,3 @@
+external xml borschik-link(scalar)
+
+include "include/2.yate"

@@ -1,6 +1,6 @@
 {
   "name": "borschik-tech-yate",
-  "version": "0.0.2",
+  "version": "1.0.0",
   "description": "Yate tech for Borschik",
   "main": "index.js",
   "scripts": {
@@ -24,7 +24,10 @@
     "url": "https://github.com/doochik/borschik-tech-yate/issues"
   },
   "peerDependencies": {
-      "borschik": "0.4.x",
+      "borschik": "1.0.x",
       "yate": "*"
+  },
+  "devDependencies": {
+      "mocha": "*"
   }
 }
