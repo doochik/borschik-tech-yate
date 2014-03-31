@@ -1,3 +1,3 @@
-external xml borschik-link(scalar)
+include "../../../yate-externals/borschik.yate"
 
 include "include/2.yate"

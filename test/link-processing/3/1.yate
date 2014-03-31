@@ -1,4 +1,4 @@
-external xml borschik-link(scalar)
+include "../../../yate-externals/borschik.yate"
 
 match / {
     borschik-link('@null.gif')

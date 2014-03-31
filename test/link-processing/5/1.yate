@@ -1,6 +1,6 @@
 include "../../../yate-externals/borschik.yate"
 
 match / {
-    name = '@null.gif'
-    borschik-link(name)
+    name =
+    borschik-link('@icon' + .name)
 }
