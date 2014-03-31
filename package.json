@@ -29,5 +29,9 @@
   },
   "devDependencies": {
       "mocha": "*"
-  }
+  },
+  "files": [
+      "index.js",
+      "yate-externals"
+  ]
 }
