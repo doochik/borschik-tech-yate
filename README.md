@@ -1,4 +1,24 @@
 borschik-tech-yate
 ==================
 
-Yate tech for Borschik
+[![Build Status](https://travis-ci.org/doochik/borschik-tech-yate.svg?branch=master)](https://travis-ci.org/doochik/borschik-tech-yate)
+
+Tech to build [Yate](https://github.com/pasaran/yate) with [Borschik](https://github.com/bem/borschik)
+
+## `borschik-link` usage
+
+`borschik-link()` in Yate works the same way as `borschik.link()` in JavaScript
+
+1. Static path
+```
+match / {
+    borschik-link('../real/path/to/file.png')
+}
+```
+
+2. Dynamic path
+```
+match / {
+    borschik-link('@my-name')
+}
+```
