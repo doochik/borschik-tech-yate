@@ -6,6 +6,7 @@ describe('link processing', function() {
     var path = require('path');
     var stream = require('stream');
     var yateRuntime = fs.readFileSync( path.join(__dirname, '../node_modules/yate/lib/runtime.js'), 'utf-8' );
+    var borschikLinkExternal = fs.readFileSync( path.join(__dirname, '../yate-externals/borschik.js'), 'utf-8' );
 
     function runYate(cb) {
         var compiltedYate = '';
@@ -19,9 +20,12 @@ describe('link processing', function() {
 
             var result = require('vm').runInNewContext([
                 yateRuntime,
+                borschikLinkExternal,
                 compiltedYate,
                 'yr.run("main")'
             ].join('\n'), {
+                borschik: require('borschik/js/borschik.js'),
+                console: console,
                 require: require
             });
 
@@ -62,7 +66,7 @@ describe('link processing', function() {
                 done();
             })
             .fail(function(e) {
-                throw new Error(e);
+                done(e);
             });
     });
 
@@ -115,14 +119,14 @@ describe('link processing', function() {
                 done();
             })
             .fail(function(e) {
-                throw new Error(e);
+                done(e);
             });
     });
 
     it("shouldn't process dynamic links", function(done) {
         var echoStream = runYate(function(result) {
             try {
-                assert.equal(result, '//yastatic.net/_/La6qi18Z8LwgnZdsAr1qy1GwCwo.gif');
+                assert.equal(result, '[borschik] Undefined link "@null.gif"');
                 done();
             } catch (e) {
                 done(e);
@@ -141,14 +145,14 @@ describe('link processing', function() {
                 done();
             })
             .fail(function(e) {
-                throw new Error(e);
+                done(e);
             });
     });
 
     it("shouldn't process links as dynamic vars", function(done) {
         var echoStream = runYate(function(result) {
             try {
-                assert.equal(result, '//yastatic.net/_/La6qi18Z8LwgnZdsAr1qy1GwCwo.gif');
+                assert.equal(result, '[borschik] Undefined link "@null.gif"');
                 done();
             } catch (e) {
                 done(e);
@@ -167,7 +171,33 @@ describe('link processing', function() {
                 done();
             })
             .fail(function(e) {
-                throw new Error(e);
+                done(e);
+            });
+    });
+
+    it("shouldn't process links as dynamic expression", function(done) {
+        var echoStream = runYate(function(result) {
+            try {
+                assert.equal(result, '[borschik] Undefined link "@icon-test"');
+                done();
+            } catch (e) {
+                done(e);
+            }
+        });
+
+        borschik
+            .api({
+                'freeze': true,
+                'input': './test/link-processing/5/1.yate',
+                'minimize': false,
+                'output': echoStream,
+                'tech': './index.js'
+            })
+            .then(function() {
+                done();
+            })
+            .fail(function(e) {
+                done(e);
             });
     });
 

@@ -30,18 +30,26 @@ var yateFile = BorschikCSSBase.File.inherit({
                     // callarg
                     var arg0 = callArgs.p.Items[0];
                     if (arg0.getType() === 'scalar') {
-                        var item = arg0.p.Expr.p.Value.p.Items[0];
-                        var baseFile = item.where.input.filename;
 
-                        // resolve link to absolute path
-                        var absLinkPath = PATH.resolve(PATH.dirname(baseFile), item.p.Value);
+                        var argExprValue = arg0.p.Expr.p.Value;
+                        if (argExprValue) {
+                            var item = argExprValue.p.Items[0];
+                            var baseFile = item.where.input.filename;
 
-                        // create fake file to link
-                        var linkFile = that.tech.createFile(absLinkPath, 'link-url', this);
+                            var linkPathRelative = item.p.Value;
+                            // skip dynamic links
+                            if (linkPathRelative.charAt(0) !== '@') {
+                                // resolve link to absolute path
+                                var linkPathAbsolute = PATH.resolve(PATH.dirname(baseFile), linkPathRelative);
 
-                        // freeze link
-                        var newLink = JSON.parse(linkFile.process(baseFile));
-                        pObject[pKey] = yate.factory.make('string_literal', {}, newLink);
+                                // create fake file to link
+                                var linkFile = that.tech.createFile(linkPathAbsolute, 'link-url', this);
+
+                                // freeze link
+                                var newLink = JSON.parse(linkFile.process(baseFile));
+                                pObject[pKey] = yate.factory.make('string_literal', {}, newLink);
+                            }
+                        }
                     }
                 }
             }
