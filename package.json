@@ -1,6 +1,6 @@
 {
   "name": "borschik-tech-yate",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Yate tech for Borschik",
   "main": "index.js",
   "scripts": {
