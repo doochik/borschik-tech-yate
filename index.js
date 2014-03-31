@@ -1,7 +1,7 @@
-var BorschikCSSBase = require('borschik/lib/techs/css-base');
+var BorschikJSBase = require('borschik/lib/techs/js');
 var PATH = require('path');
 
-var yateFile = BorschikCSSBase.File.inherit({
+var yateFile = BorschikJSBase.File.inherit({
 
     read: function() {
         var FS = require('fs');
@@ -61,11 +61,16 @@ var yateFile = BorschikCSSBase.File.inherit({
         this.content = compiled.ast.js().replace(/^.*\n/, '');
 
         return this;
+    },
+
+    // redefine process to drop js-tech behaviour
+    processInclude: function() {
+        return this.content;
     }
 
 });
 
-var yateTech = BorschikCSSBase.Tech.inherit({
+var yateTech = BorschikJSBase.Tech.inherit({
 
     File: yateFile
 
