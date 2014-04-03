@@ -6,6 +6,7 @@ var yateFile = BorschikJSBase.File.inherit({
     read: function() {
         var FS = require('fs');
         var yate = require('yate');
+        yate.modules = {};
 
         // import modules support
         var imports = this.tech.opts.techOptions.import;
