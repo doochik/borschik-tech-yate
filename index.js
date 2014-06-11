@@ -56,10 +56,13 @@ var yateFile = BorschikJSBase.File.inherit({
             }
         });
 
-        // удаляем первую строку
-        // var yr = yr || require('yate/lib/runtime.js');
-        // из-за нее нельзя исполнить JS в new Function
-        this.content = compiled.ast.js().replace(/^.*\n/, '');
+        this.content = compiled.ast.js();
+        if (!this.tech.opts.techOptions.node) {
+            // удаляем первую строку
+            // var yr = yr || require('yate/lib/runtime.js');
+            // из-за нее нельзя исполнить JS в new Function
+            this.content = this.content.replace(/^.*\n/, '');
+        }
 
         return this;
     },
