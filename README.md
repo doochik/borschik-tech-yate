@@ -5,6 +5,11 @@ borschik-tech-yate
 
 Tech to build [Yate](https://github.com/pasaran/yate) with [Borschik](https://github.com/bem/borschik)
 
+
+## Building for node
+Use `borschik -t yate -to '{"node": true}'` to build for nodejs.
+ 
+
 ## `borschik-link` usage
 
 `borschik-link()` in Yate works the same way as `borschik.link()` in JavaScript
