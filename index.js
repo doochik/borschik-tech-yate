@@ -44,7 +44,10 @@ var yateFile = BorschikJSBase.File.inherit({
                                 var linkPathAbsolute = PATH.resolve(PATH.dirname(baseFile), linkPathRelative);
 
                                 // create fake file to link
-                                var linkFile = that.tech.createFile(linkPathAbsolute, 'link-url', this);
+                                var linkFile = that.tech.createFile(linkPathAbsolute, 'link-url', {
+                                    path: baseFile,
+                                    parent: that
+                                });
 
                                 // freeze link
                                 var newLink = JSON.parse(linkFile.process(baseFile));
